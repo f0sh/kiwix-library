@@ -14,8 +14,8 @@ jobs:
             name: "codeberg-docs"
     steps:
       - uses: actions/checkout@v3
-      - run: mkdir /output
-      - run: docker run -v /output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --workers 4 --waitUntil domcontentloaded
+      - run: mkdir /tmp/output
+      - run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --workers 4 --waitUntil domcontentloaded
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
