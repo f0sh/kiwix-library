@@ -1,0 +1,22 @@
+name: Archive
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - url: "https://go.dev/doc/"
+            name: "go-docs"
+          - url: "https://docs.codeberg.org/"
+            name: "codeberg-docs"
+    steps:
+      - uses: actions/checkout@v3
+      - run: mkdir /output
+      - run: docker run -v /output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --workers 4 --waitUntil domcontentloaded
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.name }}
+          path: /output/*.zim
