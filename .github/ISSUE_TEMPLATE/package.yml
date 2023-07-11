@@ -1,0 +1,43 @@
+name: New Package request
+description: File a request for a new package to be maintained
+title: "[New]: "
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Webseite Name
+      description: What is the name of the website?
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Webseite URL
+      description: What is the full url of the website?
+      placeholder: https://www.domainname.com
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Website description
+      description: Please describe the content of the website in detail, so users know what they can find here.
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      description: What language is the content in?
+      options:
+        - en (English)
+        - de (German)
+        - it (Italian)
+        - fr (French)
+        - zh (Chinese)
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to add a new website! It usually takes up to four weeks until the package will be available.
