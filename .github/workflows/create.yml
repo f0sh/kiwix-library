@@ -16,12 +16,11 @@ jobs:
       matrix: ${{ steps.setup.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
+      - run: cat ./config.json
       - id: setup
         run: |
           echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
-          JSONA="{\"include\":"
-          JSONB="}"
-          echo "matrix=$JSONA $(cat ./config.json) $JSONB" >> $GITHUB_OUTPUT
+          echo "matrix={\"include\": $(cat ./config.json) }" >> $GITHUB_OUTPUT
       - id: create-release
         name: ${{ steps.setup.outputs.date-tag }}
         uses: softprops/action-gh-release@v1
