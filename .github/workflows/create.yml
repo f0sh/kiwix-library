@@ -16,11 +16,10 @@ jobs:
       matrix: ${{ steps.setup.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
-      - run: cat ./config.json
       - id: setup
         run: |
           echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
-          cat ./config.json >> $JSON_DATA
+          JSON_DATA=$(cat ./config.json)
           echo "matrix={\"include\": ${{ fromJSON(env.JSON_DATA) }}"
           echo "matrix={\"include\": ${{ fromJSON(env.JSON_DATA) }}" >> $GITHUB_OUTPUT
       - id: create-release
