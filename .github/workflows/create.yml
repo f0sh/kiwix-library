@@ -21,8 +21,6 @@ jobs:
           echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
           JSON_DATA=`cat ./config.json`
           JSON_DATA="${JSON_DATA//'%'/'%25'}"
-          JSON_DATA="${JSON_DATA//$'\n'/'%0A'}"
-          JSON_DATA="${JSON_DATA//$'\r'/'%0D'}"
           echo "matrix={\"include\": $JSON_DATA }"
           echo "matrix={\"include\": $JSON_DATA }" >> $GITHUB_OUTPUT
       - id: create-release
