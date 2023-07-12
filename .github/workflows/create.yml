@@ -7,29 +7,21 @@ on:
   push:
     
 jobs:
-
   release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     outputs:
-      upload_url: ${{ steps.create-release.outputs.upload_url }}
-      release_id: ${{ steps.create-release.outputs.id }}
       date-tag: ${{ steps.set.outputs.date-tag }}
     steps:
       - id: set
         run: echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
-      - run: echo "TAG=$(date +'%Y-%m')" >> $GITHUB_ENV
-      - run: |
-          echo ${{ steps.set.outputs.date-tag }}
-          echo $TAG
-          echo ${{ env.TAG }}
       - id: create-release
-        name: ${{ env.TAG }}
+        name: ${{ steps.set.outputs.date-tag }}
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.set.outputs.date-tag }}
-          name: ${{ env.TAG }}
+          name: ${{ steps.set.outputs.date-tag }}
 
 
   build-archives:
@@ -40,37 +32,25 @@ jobs:
     strategy:
       matrix:
         include:
-          # - url: "https://go.dev/doc/"
-          #   name: "go-docs"
-          # - url: "https://go.dev/learn/"
-          #   name: "learn-go"
-          # - url: "https://docs.codeberg.org/"
-          #   name: "codeberg-docs"
-          # - url: "https://docs.python.org"
-          #   name: "python-docs"
-          # - url: "https://python-telegram-bot.readthedocs.io/"
-          #   name: "python-telegram-bot-docs"
+          - url: "https://go.dev/doc/"
+            name: "go-docs"
+          - url: "https://go.dev/learn/"
+            name: "learn-go"
+          - url: "https://docs.codeberg.org/"
+            name: "codeberg-docs"
+          - url: "https://docs.python.org"
+            name: "python-docs"
+          - url: "https://python-telegram-bot.readthedocs.io/"
+            name: "python-telegram-bot-docs"
           - url: "https://gohugo.io/documentation/"
             name: "hugo-docs"
     steps:
       - uses: actions/checkout@v3
       - run: mkdir /tmp/output
-      - run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --workers 4 --waitUntil domcontentloaded
-        id: build-archive
-      - uses: actions/upload-artifact@v3 # TODO: can be deleted once releases are working
-        with:
-          name: ${{ matrix.name }}
-          path: /tmp/output/*.zim
+      - id: build-archive
+        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --workers 4 --waitUntil domcontentloaded
       - id: upload-release-asset 
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.release.outputs.date-tag }}
           files: /tmp/output/*.zim
-      - id: getname
-        run: echo "asset_name=$(ls -1 /tmp/*.zim)" >> $GITHUB_OUTPUT
-      - id: upload-release-asset-old
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_name: ${{ steps.getname.outputs.asset_name }}
-          asset_path: /tmp/output/*.zim
