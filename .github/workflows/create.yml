@@ -4,6 +4,7 @@ on:
   schedule:
     - cron: "0 0 1 * *" # run every first of month
   workflow_dispatch:
+  push:
     
 jobs:
 
