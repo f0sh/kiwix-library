@@ -20,8 +20,9 @@ jobs:
       - id: setup
         run: |
           echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
-          echo 'matrix={"include": $(cat ./config.json) }'
-          echo 'matrix={"include": $(cat ./config.json) }' >> $GITHUB_OUTPUT
+          cat ./config.json >> $JSON_DATA
+          echo "matrix={\"include\": ${{ fromJSON(env.JSON_DATA) }}"
+          echo "matrix={\"include\": ${{ fromJSON(env.JSON_DATA) }}" >> $GITHUB_OUTPUT
       - id: create-release
         name: ${{ steps.setup.outputs.date-tag }}
         uses: softprops/action-gh-release@v1
@@ -37,7 +38,7 @@ jobs:
     needs: release
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.release.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.release.outputs.matrix) }}
     name: build-${{ matrix.name }}
     steps:
       - run: mkdir /tmp/output
