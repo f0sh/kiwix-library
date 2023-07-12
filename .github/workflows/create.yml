@@ -34,6 +34,8 @@ jobs:
 
   build-archives:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: release
     strategy:
       matrix:
@@ -64,3 +66,11 @@ jobs:
         with:
           tag_name: ${{ needs.release.outputs.date-tag }}
           files: /tmp/output/*.zim
+      - id: getname
+        run: echo "asset_name=$(ls -1 /tmp/*.zim)" >> $GITHUB_OUTPUT
+      - id: upload-release-asset-old
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_name: ${{ steps.getname.outputs.asset_name }}
+          asset_path: /tmp/output/*.zim
