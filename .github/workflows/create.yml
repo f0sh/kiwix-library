@@ -16,14 +16,14 @@ jobs:
       upload_url: ${{ steps.create-release.outputs.upload_url }}
       release_id: ${{ steps.create-release.outputs.id }}
     steps:
-      - id: set-date-tag
+      - id: set
         run: echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
+      - run: echo ${{ steps.set.output.date-tag}}
       - id: create-release
-        name: ${{ steps.set-date-tag.output.date-tag}}
+        name: ${{ steps.set.output.date-tag}}
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.set-date-tag.output.date-tag}}
-          name: ${{ steps.set-date-tag.output.date-tag}}
+          name: ${{ steps.set.output.date-tag}}
 
 
   build-archives:
