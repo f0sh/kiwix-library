@@ -1,4 +1,4 @@
-name: Archive
+name: "Create zim archive"
 
 on:
   schedule:
@@ -12,16 +12,22 @@ jobs:
     permissions:
       contents: write
     outputs:
-      date-tag: ${{ steps.set.outputs.date-tag }}
+      date-tag: ${{ steps.setup.outputs.date-tag }}
+      matrix: ${{ steps.setup.outputs.matrix }}
     steps:
-      - id: set
-        run: echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v3
+      - id: setup
+        run: |
+          echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
+          JSONA="{\"include\":"
+          JSONB="}"
+          echo "matrix=$JSONA $(cat ./config.json) $JSONB" >> $GITHUB_OUTPUT
       - id: create-release
-        name: ${{ steps.set.outputs.date-tag }}
+        name: ${{ steps.setup.outputs.date-tag }}
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.set.outputs.date-tag }}
-          name: ${{ steps.set.outputs.date-tag }}
+          tag_name: ${{ steps.setup.outputs.date-tag }}
+          name: ${{ steps.setup.outputs.date-tag }}
 
 
   build-archives:
@@ -30,25 +36,13 @@ jobs:
       contents: write
     needs: release
     strategy:
-      matrix:
-        include:
-          - url: "https://go.dev/doc/"
-            name: "go-docs"
-          - url: "https://go.dev/learn/"
-            name: "learn-go"
-          - url: "https://docs.codeberg.org/"
-            name: "codeberg-docs"
-          - url: "https://docs.python.org"
-            name: "python-docs"
-          - url: "https://python-telegram-bot.readthedocs.io/"
-            name: "python-telegram-bot-docs"
-          - url: "https://gohugo.io/documentation/"
-            name: "hugo-docs"
+      fail-fast: false
+      matrix: ${{ fromJson(needs.release.outputs.matrix) }}
+    name: build-${{ matrix.name }}
     steps:
-      - uses: actions/checkout@v3
       - run: mkdir /tmp/output
       - id: build-archive
-        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --workers 4 --waitUntil domcontentloaded
+        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url ${{ matrix.url }} --name ${{ matrix.name }} --lang ${{ matrix.lang }} --title ${{ matrix.title }} --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded
       - id: upload-release-asset 
         uses: softprops/action-gh-release@v1
         with:
