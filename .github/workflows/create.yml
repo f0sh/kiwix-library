@@ -18,10 +18,11 @@ jobs:
       - id: set-date-tag
         run: echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
       - id: create-release
+        name: ${{ steps.set-date-tag.output.date-tag}}
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.set-date-tag.output.date-tag}}
-          release_name: ${{ steps.set-date-tag.output.date-tag}}
+          name: ${{ steps.set-date-tag.output.date-tag}}
 
 
   build-archives:
