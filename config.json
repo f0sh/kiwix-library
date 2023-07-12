@@ -1,5 +1,4 @@
 [
-    
     {
         "name": "secret-wiki",
         "title": "Secret Wiki",
@@ -13,32 +12,5 @@
         "url": "https://grossmutters-sparstrumpf.de/",
         "desc": "Langsam reich werden – und gelassen in Rente gehen",
         "lang": "deu"
-    },
-    {
-        "name": "go-docs",
-        "title": "Go Documentation",
-        "url": "https://go.dev/doc/",
-        "desc": "The documentation for GoLang",
-        "lang": "eng"
-
-    },
-    {
-        "name": "learn-go",
-        "title": "Go Learning Tutorials",
-        "url": "https://go.dev/learn/",
-        "desc": "Learn GoLang with this tutorial",
-        "lang": "eng"
-    },
-    {
-        "name": "codeberg-docs",
-        "url": "https://docs.codeberg.org/"
-    },
-    {
-        "name": "python-docs",
-        "url": "https://docs.python.org"
-    },
-    {
-        "name": "hugo-docs",
-        "url": "https://gohugo.io/"
     }
 ]

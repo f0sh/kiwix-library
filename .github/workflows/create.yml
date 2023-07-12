@@ -20,7 +20,8 @@ jobs:
       - id: setup
         run: |
           echo "date-tag=$(date +'%Y-%m')" >> $GITHUB_OUTPUT
-          echo "matrix={\"include\": $(cat ./config.json) }" >> $GITHUB_OUTPUT
+          echo 'matrix={"include": $(cat ./config.json) }'
+          echo 'matrix={"include": $(cat ./config.json) }' >> $GITHUB_OUTPUT
       - id: create-release
         name: ${{ steps.setup.outputs.date-tag }}
         uses: softprops/action-gh-release@v1
