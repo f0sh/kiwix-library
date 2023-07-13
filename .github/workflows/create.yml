@@ -42,9 +42,9 @@ jobs:
       matrix: ${{ fromJSON(needs.release.outputs.matrix) }}
     name: build-${{ matrix.name }}
     env:
-      exclude: ${{ matrix.exclude && format('--exclude {0}', matrix.exclude) || '' }}
+      exclude: ${{ matrix.exclude && format('--exclude "{0}"', matrix.exclude) || '' }}
       scope: ${{ matrix.scope && format('--scopeType {0}', matrix.scope) || '' }}
-      block: ${{ matrix.block && format('--blockMessage Blocked --blockRules {0}', matrix.block) || '' }}
+      block: ${{ matrix.block && format('--blockMessage Blocked --blockRules "{0}"', matrix.block) || '' }}
     steps:
       - run: mkdir /tmp/output
       # build a zim with webrecorder/browsertrix-crawler

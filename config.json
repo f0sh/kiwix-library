@@ -7,7 +7,7 @@
         "lang": "deu",
         "scope": "prefix",
         "exclude": "secret-wiki.de/wiki/(Spezial:|Online-Kongresse|Online-Kurse|Bücher)",
-        "block": "[{\"url\": \"*disqus.com\"}, {\"url\": \"*disquscdn.com\"}, {\"url\": \"*facebook.com\"}, {\"url\": \"*twitter.com\"}, {\"url\": \"*google.com\"}, {\"url\": \"*onetrust.com\"}]"
+        "block": "[{\\\"url\\\": \\\"*disqus.com\\\"}, {\\\"url\\\": \\\"*disquscdn.com\\\"}, {\\\"url\\\": \\\"*facebook.com\\\"}, {\\\"url\\\": \\\"*twitter.com\\\"}, {\\\"url\\\": \\\"*google.com\\\"}, {\\\"url\\\": \\\"*onetrust.com\\\"}]"
     },
     {
         "name": "grossmutters-sparstrumpf",
