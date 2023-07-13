@@ -44,13 +44,13 @@ jobs:
     env:
       exclude: ${{ matrix.exclude && format('--exclude "{0}"', matrix.exclude) || '' }}
       scope: ${{ matrix.scope && format('--scopeType {0}', matrix.scope) || '' }}
-      block: ${{ matrix.block && format('--blockMessage Blocked --blockRules "{0}"', matrix.block) || '' }}
+      # block: ${{ matrix.block && format('--blockMessage Blocked --blockRules "{0}"', matrix.block) || '' }}
     steps:
       - run: mkdir /tmp/output
       # build a zim with webrecorder/browsertrix-crawler
       # TODO: add site depending config with --config <file> parameter
       - id: build-archive
-        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url "${{ matrix.url }}" --name "${{ matrix.name }}" --lang "${{ matrix.lang }}" --title "${{ matrix.title }}" --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded ${{ env.scope }} ${{ env.exclude }} ${{ env.block }}
+        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url "${{ matrix.url }}" --name "${{ matrix.name }}" --lang "${{ matrix.lang }}" --title "${{ matrix.title }}" --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded ${{ env.scope }} ${{ env.exclude }}
       # TODO: generate xml
       # - id: generate-library
       #   run: |
