@@ -41,18 +41,23 @@ jobs:
       fail-fast: false
       matrix: ${{ fromJSON(needs.release.outputs.matrix) }}
     name: build-${{ matrix.name }}
+    env:
+      exclude: ${{ matrix.exclude && format('--exclude {0}', matrix.exclude) || '' }}
+      scope: ${{ matrix.scope && format('--scopeType {0}', matrix.scope) || '' }}
+      block: ${{ matrix.block && format('--blockMessage Blocked --blockRules {0}', matrix.block) || '' }}
     steps:
       - run: mkdir /tmp/output
       # build a zim with webrecorder/browsertrix-crawler
       # TODO: add site depending config with --config <file> parameter
       - id: build-archive
-        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url "${{ matrix.url }}" --name "${{ matrix.name }}" --lang "${{ matrix.lang }}" --title "${{ matrix.title }}" --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded --scopeType domain
+        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url "${{ matrix.url }}" --name "${{ matrix.name }}" --lang "${{ matrix.lang }}" --title "${{ matrix.title }}" --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded ${{ env.scope }} ${{ env.exclude }} ${{ env.block }}
       # TODO: generate xml
       # - id: generate-library
       #   run: |
-      #     wget https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-x86_64.tar.gz | tar xzv -
-      #     kiwix-manage library.xml add $(ls -1 /tmp/output/*.zim )
+      #     cd /tmp && wget -c https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-x86_64.tar.gz -O - | tar -xz
+      #     kiwix-manage library.xml add output/$(ls -1 output/*.zim )
       #     cat library.xml | grep book >> 
+      - run: echo "created zim archives\n$(du -h *.zim)"
       - id: upload-release-asset 
         uses: softprops/action-gh-release@v1
         with:

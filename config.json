@@ -2,15 +2,20 @@
     {
         "name": "secret-wiki",
         "title": "Secret Wiki",
-        "url": "https://secret-wiki.de/",
+        "url": "https://secret-wiki.de/wiki/",
         "desc": "Mach deine Welt lebenswerter. Das liebevoll strukturierte Wissen auf Secret Wiki ist dein Kompass für mehr Bewusstsein und Freude in deinem Leben.",
-        "lang": "deu"
+        "lang": "deu",
+        "scope": "prefix",
+        "exclude": "secret-wiki.de/wiki/(Spezial:|Online-Kongresse|Online-Kurse|Bücher)",
+        "block": "[{\"url\": \"*disqus.com\"}, {\"url\": \"*disquscdn.com\"}, {\"url\": \"*facebook.com\"}, {\"url\": \"*twitter.com\"}, {\"url\": \"*google.com\"}, {\"url\": \"*onetrust.com\"}]"
     },
     {
         "name": "grossmutters-sparstrumpf",
-        "title": "Grpßmutters Sparstrumpf",
+        "title": "Großmutters Sparstrumpf",
         "url": "https://grossmutters-sparstrumpf.de/",
         "desc": "Langsam reich werden – und gelassen in Rente gehen",
-        "lang": "deu"
+        "lang": "deu",
+        "scope": "prefix",
+        "exclude": "grossmutters-sparstrumpf.de/(newsletter|category|das-geld-seminar-duesseldorf-2022|finanzcoaching)"
     }
 ]
