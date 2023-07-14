@@ -52,7 +52,7 @@ jobs:
       - id: build-archive
         if: ${{ matrix.tool != 'mwoffliner' }}
         run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url "${{ matrix.url }}" --name "${{ matrix.name }}" --lang "${{ matrix.lang }}" --title "${{ matrix.title }}" --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded ${{ env.scope }} ${{ env.exclude }}
-      - id: build-archive
+      - id: build-archive-mxoffliner
         if: ${{ matrix.tool == 'mwoffliner' }}
         run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/mwoffliner mwoffliner --mwUrl="${{ matrix.url }}" --adminEmail=f0sh@mailbox.org --customZimLanguage="${{ matrix.lang }}" --customZimTitle="${{ matrix.title }}" --customZimDescription="${{ matrix.desc }}" --publisher f0sh --minifyHtml --webp
       # TODO: generate xml
@@ -61,7 +61,7 @@ jobs:
       #     cd /tmp && wget -c https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-x86_64.tar.gz -O - | tar -xz
       #     kiwix-manage library.xml add output/$(ls -1 output/*.zim )
       #     cat library.xml | grep book >> 
-      - run: echo "created zim archives\n$(du -h *.zim)"
+      - run: echo "created zim archives $(du -h /tmp/output/*.zim)"
       - id: upload-release-asset 
         uses: softprops/action-gh-release@v1
         with:
