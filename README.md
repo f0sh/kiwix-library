@@ -1,5 +1,7 @@
 # Collection of kiwix libraries
 
+[![Creating zim archives](https://github.com/f0sh/kiwix-library/actions/workflows/create.yml/badge.svg)](https://github.com/f0sh/kiwix-library/actions/workflows/create.yml)
+
 [Kiwix](https://kiwix.org) is a software which allows you to browse websites offline using highly compressed [zim archives]. On this website you find a collection of up-to-date zim archives from various websites in addition to the awesome list of the [kiwix library](https://library.kiwix.org). 
 
 ## Collection

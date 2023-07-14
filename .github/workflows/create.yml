@@ -50,7 +50,11 @@ jobs:
       # build a zim with webrecorder/browsertrix-crawler
       # TODO: add site depending config with --config <file> parameter
       - id: build-archive
+        if: ${{ matrix.tool != 'mwoffliner' }}
         run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/zimit zimit --url "${{ matrix.url }}" --name "${{ matrix.name }}" --lang "${{ matrix.lang }}" --title "${{ matrix.title }}" --description "${{ matrix.desc }}" --source "https://github.com/f0sh/kiwix-library" --creator f0sh --workers 4 --waitUntil domcontentloaded ${{ env.scope }} ${{ env.exclude }}
+      - id: build-archive
+        if: ${{ matrix.tool == 'mwoffliner' }}
+        run: docker run -v /tmp/output:/output --shm-size=1gb ghcr.io/openzim/mwoffliner mwoffliner --mwUrl="${{ matrix.url }}" --adminEmail=f0sh@mailbox.org --customZimLanguage="${{ matrix.lang }}" --customZimTitle="${{ matrix.title }}" --customZimDescription="${{ matrix.desc }}" --publisher f0sh --minifyHtml --webp
       # TODO: generate xml
       # - id: generate-library
       #   run: |
